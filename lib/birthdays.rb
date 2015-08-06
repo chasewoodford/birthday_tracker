@@ -47,7 +47,7 @@ class Birthdays
   def do_action(action)
     case action
     when 'list'
-      puts "Listing..."
+      list
     when 'find'
       puts "Finding..."
     when 'add'
@@ -69,13 +69,21 @@ class Birthdays
     end
   end
 
+  def list
+    puts "\nListing birthdays\n\n".upcase
+    birthdays = Birthday.saved_restaurants
+    birthdays.each do |bday|
+      puts bday.first_name + " | " + bday.last_name + " | " + bday.date
+    end
+  end
+
   def introduction
     puts "\n\n<<< Welcome to the Birthday Tracker >>>\n\n"
     puts "This is an interactive guide to help you find the birthday you're looking for.\n\n"
   end
 
   def conclusion
-    puts "\n<<< Goodbye and Happy Birthday! >>>\n\n\n"
+    puts "\n<<< Goodbye and Happy Birthday! >>>\n"
   end
 
 end

@@ -28,14 +28,28 @@ class Birthday
   end
 
   def self.saved_restaurants
-    # read the restaurant file
-    # return instances of restaurant
+    # read the birthdays file
+    birthdays = []
+    if file_usable?
+      file = File.new(@@filepath, 'r')
+      file.each_line do |line|
+        birthdays << Birthday.new.import_line(line.chomp)
+      end
+      file.close
+    end
+    return birthdays
   end
 
   def initialize(args={})
     @first_name = args[:first_name] || ""
     @last_name = args[:last_name]   || ""
     @date = args[:date]             || ""
+  end
+
+  def import_line(line)
+    line_array = line.split("\t")
+    @first_name, @last_name, @date = line_array
+    return self
   end
 
   def self.build_using_questions
