@@ -27,7 +27,7 @@ class Birthday
     return file_usable?
   end
 
-  def self.saved_restaurants
+  def self.saved_birthdays
     # read the birthdays file
     birthdays = []
     if file_usable?
@@ -61,7 +61,7 @@ class Birthday
     print "Last Name: "
     args[:last_name] = gets.chomp.strip
 
-    print "Date (MM/DD): "
+    print "Date (MM-DD): "
     args[:date] = gets.chomp.strip
 
     return self.new(args)

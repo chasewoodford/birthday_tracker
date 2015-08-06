@@ -10,10 +10,10 @@ class Birthdays
     # locate the birthdays text file at path
     Birthday.filepath = path
     if Birthday.file_usable?
-      puts "Found restaurant file."
+      puts "Found birthdays file."
       # or create a new file
     elsif Birthday.create_file
-      puts "Created restaurant file."
+      puts "Created birthdays file."
       # exit if create fails
     else
       puts "Exiting.\n\n"
@@ -26,8 +26,8 @@ class Birthdays
     # action loop
     result = nil
     until result == :quit
-      action = get_action
-      result = do_action(action)
+      action, args = get_action
+      result = do_action(action, args)
     end
     conclusion
   end
@@ -39,17 +39,19 @@ class Birthdays
       puts "Actions: " + Birthdays::Config.actions.join(", ") if action
       print "> "
       user_response = gets.chomp
-      action = user_response.downcase.strip
+      args = user_response.downcase.strip.split(' ')
+      action = args.shift
     end
-    return action
+    return action, args
   end
 
-  def do_action(action)
+  def do_action(action, args=[])
     case action
     when 'list'
       list
     when 'find'
-      puts "Finding..."
+      keyword = args.shift
+      find(keyword)
     when 'add'
       add
     when 'quit'
@@ -59,21 +61,35 @@ class Birthdays
     end
   end
 
+  def list
+    output_action_header("Listing birthdays")
+    birthdays = Birthday.saved_birthdays
+    output_birthday_table(birthdays)
+  end
+
+  def find(keyword="")
+    output_action_header("Find a birthday")
+    if keyword
+      birthdays = Birthday.saved_birthdays
+      found = birthdays.select do |bday|
+        bday.first_name.downcase.include?(keyword.downcase) ||
+        bday.last_name.downcase.include?(keyword.downcase) ||
+        bday.date.include?(keyword)
+      end
+      output_birthday_table(found)
+    else
+      puts "Find using a key phrase to search the birthday list."
+      puts "Examples: 'find Chase', 'find Woodford', 'find 10-26'\n\n"
+    end
+  end
+
   def add
-    puts "\nAdd a birthday\n\n".upcase
+    output_action_header("Add a birthday")
     birthday = Birthday.build_using_questions
     if birthday.save
       puts "\nBirthday added\n\n"
     else
       puts "\nSave error: birthday not added\n\n"
-    end
-  end
-
-  def list
-    puts "\nListing birthdays\n\n".upcase
-    birthdays = Birthday.saved_restaurants
-    birthdays.each do |bday|
-      puts bday.first_name + " | " + bday.last_name + " | " + bday.date
     end
   end
 
@@ -84,6 +100,27 @@ class Birthdays
 
   def conclusion
     puts "\n<<< Goodbye and Happy Birthday! >>>\n"
+  end
+
+  private
+
+  def output_action_header(text)
+    puts "\n#{text.upcase.center(60)}\n\n"
+  end
+
+  def output_birthday_table(birthdays=[])
+    print " " + "First Name".ljust(25)
+    print " " + "Last Name".ljust(25)
+    print " " + "Date".rjust(6) + "\n"
+    puts "-" * 60
+    birthdays.each do |bday|
+      line = " " << bday.first_name.ljust(25)
+      line << " " + bday.last_name.ljust(25)
+      line << " " + bday.date.rjust(6)
+      puts line
+    end
+    puts "No listings found" if birthdays.empty?
+    puts "-" * 60
   end
 
 end
