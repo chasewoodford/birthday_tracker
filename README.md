@@ -4,5 +4,5 @@ Ruby program used to track birthdays. Created while learning Ruby from [@kskoglu
 To use:
 
 - Make sure you have Ruby installed
-- Clone the repo and '`cd`' into it.
-- Run '`ruby ruby init.rb`'
+- Clone the repo and `cd` into it.
+- Run `ruby ruby init.rb`
