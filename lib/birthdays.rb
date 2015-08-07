@@ -1,4 +1,5 @@
 require 'birthday'
+
 class Birthdays
 
   class Config
@@ -7,14 +8,15 @@ class Birthdays
   end
 
   def initialize(path=nil)
-    # locate the birthdays text file at path
+    # Locate birthdays.txt file at path
     Birthday.filepath = path
+    # If exists...
     if Birthday.file_usable?
       puts "Found birthdays file."
-      # or create a new file
+    # Or create a new file...
     elsif Birthday.create_file
       puts "Created birthdays file."
-      # exit if create fails
+    # Or if something breaks...
     else
       puts "Exiting.\n\n"
       exit!
@@ -22,13 +24,15 @@ class Birthdays
   end
 
   def launch!
+    # Display welcome message
     introduction
-    # action loop
+    # Run action loop
     result = nil
     until result == :quit
       action, args = get_action
       result = do_action(action, args)
     end
+    # Display goodbye message
     conclusion
   end
 
@@ -47,24 +51,39 @@ class Birthdays
 
   def do_action(action, args=[])
     case action
-    when 'list'
-      list
-    when 'find'
-      keyword = args.shift
-      find(keyword)
-    when 'add'
-      add
-    when 'quit'
-      return :quit
-    else
-      puts "\nI don't understand that command.\n"
+      when 'list'
+        list(args)
+      when 'find'
+        keyword = args.shift
+        find(keyword)
+      when 'add'
+        add
+      when 'quit'
+        return :quit
+      else
+        puts "\nI don't understand that command.\n"
     end
   end
 
-  def list
+  def list(args=[])
+    sort_order = args.shift
+    sort_order = args.shift if sort_order == 'by'
+    sort_order ||= "first_name"
+    sort_order = "name" unless ['first_name', 'last_name', 'date'].include?(sort_order)
     output_action_header("Listing birthdays")
     birthdays = Birthday.saved_birthdays
+    birthdays.sort! do |bday1, bday2|
+      case sort_order
+        when 'first_name'
+          bday1.first_name.downcase <=> bday2.first_name.downcase
+        when 'last_name'
+          bday1.last_name.downcase <=> bday2.last_name.downcase
+        when 'date'
+          bday1.date <=> bday2.date
+      end
+    end
     output_birthday_table(birthdays)
+    puts "Sort using: 'list last_name' or 'list by date'"
   end
 
   def find(keyword="")
@@ -103,7 +122,6 @@ class Birthdays
   end
 
   private
-
   def output_action_header(text)
     puts "\n#{text.upcase.center(60)}\n\n"
   end
@@ -122,5 +140,4 @@ class Birthdays
     puts "No listings found" if birthdays.empty?
     puts "-" * 60
   end
-
 end
