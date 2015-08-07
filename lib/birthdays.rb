@@ -40,7 +40,7 @@ class Birthdays
     action = nil
     # Keep asking for user input until we get a valid action
     until Birthdays::Config.actions.include?(action)
-      puts "Actions: " + Birthdays::Config.actions.join(", ") if action
+      puts "\nActions: " + Birthdays::Config.actions.join(", ") + "\n\n" if action
       print "> "
       user_response = gets.chomp
       args = user_response.downcase.strip.split(' ')
@@ -115,6 +115,7 @@ class Birthdays
   def introduction
     puts "\n\n<<< Welcome to the Birthday Tracker >>>\n\n"
     puts "This is an interactive guide to help you find the birthday you're looking for.\n\n"
+    puts "Actions: " + Birthdays::Config.actions.join(", ") + "\n\n\n"
   end
 
   def conclusion
