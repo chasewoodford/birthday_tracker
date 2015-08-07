@@ -83,7 +83,7 @@ class Birthdays
       end
     end
     output_birthday_table(birthdays)
-    puts "Sort using: 'list last_name' or 'list by date'"
+    puts "Sort using: 'list last_name' or 'list by date'\n\n"
   end
 
   def find(keyword="")
