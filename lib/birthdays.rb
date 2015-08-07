@@ -12,13 +12,13 @@ class Birthdays
     Birthday.filepath = path
     # If exists...
     if Birthday.file_usable?
-      puts "Found birthdays file."
+      puts "\nFound birthdays file."
     # Or create a new file...
     elsif Birthday.create_file
-      puts "Created birthdays file."
+      puts "\nCreated birthdays file."
     # Or if something breaks...
     else
-      puts "Exiting.\n\n"
+      puts "\nExiting.\n\n"
       exit!
     end
   end
@@ -68,7 +68,7 @@ class Birthdays
   def list(args=[])
     sort_order = args.shift
     sort_order = args.shift if sort_order == 'by'
-    sort_order ||= "first_name"
+    sort_order ||= "date"
     sort_order = "name" unless ['first_name', 'last_name', 'date'].include?(sort_order)
     output_action_header("Listing birthdays")
     birthdays = Birthday.saved_birthdays
@@ -113,13 +113,14 @@ class Birthdays
   end
 
   def introduction
-    puts "\n\n<<< Welcome to the Birthday Tracker >>>\n\n"
+    puts "\n<<< Welcome to the Birthday Tracker >>>\n\n"
+    puts "Created by: Chase Woodford\n\n"
     puts "This is an interactive guide to help you find the birthday you're looking for.\n\n"
     puts "Actions: " + Birthdays::Config.actions.join(", ") + "\n\n\n"
   end
 
   def conclusion
-    puts "\n<<< Goodbye and Happy Birthday! >>>\n"
+    puts "\n<<< Goodbye and happy birthday'ing! >>>\n"
   end
 
   private
