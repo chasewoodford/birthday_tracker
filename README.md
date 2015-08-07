@@ -1,5 +1,5 @@
 # birthday_tracker
-Ruby program used to track birthdays. Created while learning Ruby from [https://twitter.com/kskoglund](@kskoglund)'s 'Ruby Essential Training' on lynda.com.
+Ruby program used to track birthdays. Created while learning Ruby from [@kskoglund](https://twitter.com/kskoglund)'s 'Ruby Essential Training' on lynda.com.
 
 To use:
 1. Make sure you have Ruby installed
